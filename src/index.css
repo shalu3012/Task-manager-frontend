@@ -1,0 +1,376 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.cards {
+  display: grid;
+  grid-template-columns: 1fr repeat(12, minmax(auto, 60px)) 1fr;
+  grid-gap: 40px;
+  padding: 60px 0;
+}
+.cards-container {
+  grid-column: 2 / span 12;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(auto, 60px));
+  grid-gap: 40px;
+}
+.card {
+  grid-column-end: span 4;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  background-color: rgb(244, 241, 241);
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  border-radius: 10px;
+}
+.card:hover {
+  transform: translateY(-7px);
+}
+.card-title {
+  border-radius: 10px 10px 0px 0px;
+  text-align: center;
+  font-size: 14px;
+}
+.card-title.To-do {
+  background-color: rgb(255, 255, 111);
+}
+.card-title.Doing {
+  background-color: rgb(84, 152, 234);
+}
+.card-title.Done {
+  background-color: rgb(88, 236, 103);
+}
+.task-container {
+  display: flex;
+  background-color: rgb(212, 210, 210);
+  margin: 15px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  justify-content: space-between;
+  align-items: center;
+}
+.task {
+  font-size: 20px;
+}
+.task-title {
+  font-weight: 500;
+}
+.title {
+  max-width: 250px;
+}
+.task-content {
+  font-size: 15px;
+}
+.task-actions {
+  display: flex;
+}
+.task-actions svg {
+  background: transparent;
+  border-radius: 8px;
+  padding: 3px;
+  margin: 3px;
+}
+.task-actions svg:hover {
+  transform: scale(1.2);
+  background-color: rgb(244, 241, 241);
+}
+
+/* Form */
+.add-task {
+  width: 400px;
+  margin: 16px auto;
+  font-size: 16px;
+}
+
+/* Reset top and bottom margins from certain elements */
+.add-task-header,
+.add-task p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.add-task-header {
+  background: #28d;
+  padding: 20px;
+  font-size: 1.4em;
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.add-task-container {
+  background: #ebebeb;
+  padding: 12px;
+}
+
+/* Every row inside .add-task-container is defined with p tags */
+.add-task p {
+  padding: 12px;
+}
+
+.add-task input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 16px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 0.95em;
+}
+
+.add-task input[type="text"] {
+  background: #fff;
+  border-color: #bbb;
+  color: #555;
+}
+
+/* Text fields' focus effect */
+.add-task input[type="email"]:focus {
+  border-color: #888;
+}
+
+.add-task input[type="submit"] {
+  background: #28d;
+  border-color: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.add-task input[type="submit"]:hover {
+  background: #17c;
+}
+
+/* Buttons' focus effect */
+.add-task input[type="submit"]:focus {
+  border-color: #05a;
+}
+
+select {
+  min-width: 350px;
+  height: 54px;
+  margin-left: 12px;
+  display: inline-block;
+  position: relative;
+  border: 1px solid lightgray;
+  background-color: white;
+  font-family: Georgia;
+  border-width: 1px;
+  border-style: solid;
+  padding: 16px;
+  outline: 0;
+  font-family: inherit;
+  color: #555;
+  font-size: 0.95em;
+}
+select > option {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+select:after {
+  position: absolute;
+  content: "▾";
+  display: block;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  line-height: 46px;
+}
+select label {
+  display: none;
+  white-space: nowrap;
+  line-height: 46px;
+  padding: 0 15px;
+  cursor: pointer;
+}
+
+select label:hover {
+  background-color: lightblue;
+}
+select option {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* Form */
+@media only screen and (max-width: 1000px) {
+  .card {
+    grid-column-end: span 6;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  main {
+    grid-gap: 20px;
+  }
+  .card {
+    grid-column-end: span 12;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  main {
+    grid-template-columns: 10px repeat(6, 1fr) 10px;
+    grid-gap: 10px;
+  }
+  .cards {
+    grid-column: 2 / span 6;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 20px;
+  }
+  .card {
+    grid-column-end: span 6;
+  }
+}
+
+/* modal */
+.darkBG {
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal {
+  width: 250px;
+  height: 170px;
+  background: white;
+  color: white;
+  z-index: 10;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+}
+
+.modalHeader {
+  height: 50px;
+  background: white;
+  overflow: hidden;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.heading {
+  margin: 0;
+  padding: 10px;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+}
+
+.modalContent {
+  padding: 10px;
+  font-size: 14px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.modalActions {
+  position: absolute;
+  bottom: 2px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.actionsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.closeBtn {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 18px;
+  color: #2c3e50;
+  background: white;
+  transition: all 0.25s ease;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
+  position: absolute;
+  right: 0;
+  top: 0;
+  align-self: flex-end;
+  margin-top: -7px;
+  margin-right: -7px;
+}
+
+.closeBtn:hover {
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  transform: translate(-4px, 4px);
+}
+
+.deleteBtn {
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 11px 28px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  border: none;
+  color: #fff;
+  background: #ff3e4e;
+  transition: all 0.25s ease;
+}
+
+.deleteBtn:hover {
+  box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
+  transform: translateY(-5px);
+  background: #ff3e4e;
+}
+
+.cancelBtn {
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 11px 28px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  border: none;
+  color: #2c3e50;
+  background: #fcfcfc;
+  transition: all 0.25s ease;
+}
+
+.cancelBtn:hover {
+  box-shadow: none;
+  transform: none;
+  background: whitesmoke;
+}
+/* modal */
