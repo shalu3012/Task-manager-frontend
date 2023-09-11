@@ -16,7 +16,9 @@ const Task = ({ id, tasks, handleTaskEdit }) => {
 
   async function deleteTask(id) {
     axios
-      .delete("http://localhost:5000/api/task/delete", { params: { _id: id } })
+      .delete(`${process.env.REACT_SERVER_URL}/api/task/delete`, {
+        params: { _id: id },
+      })
       .then((res) => {
         alert(res.data.message);
         window.location.reload();
