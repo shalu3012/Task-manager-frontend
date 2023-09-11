@@ -121,10 +121,13 @@ code {
 }
 
 /* Every row inside .add-task-container is defined with p tags */
-.add-task p {
+.form-inp {
   padding: 12px;
 }
-
+.form-label {
+  font-size: 18px;
+  letter-spacing: 0.7px;
+}
 .add-task input {
   box-sizing: border-box;
   display: block;
@@ -167,7 +170,6 @@ code {
 select {
   min-width: 350px;
   height: 54px;
-  margin-left: 12px;
   display: inline-block;
   position: relative;
   border: 1px solid lightgray;

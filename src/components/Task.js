@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useDrag } from "react-dnd";
+import { toast } from "react-toastify";
 
-const Task = ({ id, tasks, handleTaskEdit }) => {
+const Task = ({ id, tasks, handleTaskEdit, fetchTasks, setFetchTasks }) => {
   const [editing, setEditing] = useState(false);
   const [editTaskId, setEditTaskId] = useState(0);
-
-  const [{ isDragging }, drag] = useDrag({
-    type: "TASK",
-    item: { id },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
 
   async function deleteTask(id) {
     axios
@@ -20,8 +13,8 @@ const Task = ({ id, tasks, handleTaskEdit }) => {
         params: { _id: id },
       })
       .then((res) => {
-        alert(res.data.message);
-        window.location.reload();
+        toast.success(res.data.message);
+        setFetchTasks(true);
       });
   }
 
@@ -33,18 +26,7 @@ const Task = ({ id, tasks, handleTaskEdit }) => {
     <main>
       {tasks &&
         tasks.map((task) => (
-          <div
-            className="task-container"
-            key={task._id}
-            ref={drag}
-            style={{
-              opacity: isDragging ? 0.5 : 1,
-              cursor: "move",
-              border: "1px solid #ccc",
-              marginBottom: "8px",
-              padding: "8px",
-            }}
-          >
+          <div className="task-container" key={task._id}>
             <div className="task">
               <div className="task-title">
                 <p className="title">{task.name}</p>

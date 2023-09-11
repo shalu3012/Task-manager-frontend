@@ -3,14 +3,15 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Card from "./Card";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Cards = () => {
-  console.log(process.env.REACT_APP_SERVER_URL);
   const [tasks, setTasks] = useState();
+  const [fetchTasks, setFetchTasks] = useState(true);
   const [editTaskId, setEditTaskId] = useState();
   const [task, setTask] = useState({
     name: "",
-    status: "",
+    status: "Todo",
   });
 
   function handleChange(e) {
@@ -30,27 +31,30 @@ const Cards = () => {
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/api/task/create`, task)
       .then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message);
         clearState();
+        setFetchTasks(true);
         // window.location.reload();
       })
       .catch((error) => {
         console.log(error);
-        console.log(error.response.data.messages[0]);
+        toast.error(error.response.data.messages[0]);
       });
   }
 
   useEffect(() => {
-    async function fetchTasks() {
-      await axios
-        .get(`${process.env.REACT_APP_SERVER_URL}/api/task/tasks`)
-        .then((response) => {
-          setTasks(response.data.tasks);
-        });
-    }
+    if (fetchTasks) {
+      const fetchData = async () => {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/api/task/tasks`
+        );
 
-    fetchTasks();
-  }, []);
+        setTasks(response.data.tasks);
+      };
+      fetchData();
+      setFetchTasks(false);
+    }
+  }, [fetchTasks, setFetchTasks]);
 
   function filterTasksByStatus(status) {
     if (tasks) {
@@ -71,19 +75,19 @@ const Cards = () => {
   }
 
   async function handleUpdate() {
-    console.log("inside handle update");
     await axios
       .put(`${process.env.REACT_APP_SERVER_URL}/api/task/update`, task, {
         params: { _id: editTaskId },
       })
       .then((response) => {
-        alert(response.data.message);
+        toast.success(response.data.message);
+        setFetchTasks(true);
         clearState();
+        setEditTaskId("");
         // window.location.reload();
       })
       .catch((error) => {
-        console.log(error);
-        console.log(error.response.data.messages[0]);
+        toast.error(error.response.data.messages[0]);
       });
   }
   function handleClick(e) {
@@ -95,24 +99,16 @@ const Cards = () => {
     }
   }
 
-  const handleDrop = (taskId, newCategory) => {
-    console.log(taskId);
-    console.log(newCategory);
-
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, category: newCategory } : task
-      )
-    );
-  };
-
   return (
     <main>
       <div className="add-task">
         <div className="add-task">
           <h2 className="add-task-header">Add task</h2>
           <form className="add-task-container">
-            <p>
+            <div className="form-inp">
+              <label htmlFor="name" className="form-label">
+                Task
+              </label>
               <input
                 name="name"
                 type="text"
@@ -121,13 +117,18 @@ const Cards = () => {
                 onChange={handleChange}
                 autoComplete="off"
               />
-            </p>
+            </div>
 
-            <select value={task.status} onChange={handleChange} name="status">
-              <option value="Todo">Todo</option>
-              <option value="Doing">Doing</option>
-              <option value="Done">Done</option>
-            </select>
+            <div className="form-inp">
+              <label htmlFor="name" className="form-label">
+                Status
+              </label>
+              <select value={task.status} onChange={handleChange} name="status">
+                <option value="Todo">Todo</option>
+                <option value="Doing">Doing</option>
+                <option value="Done">Done</option>
+              </select>
+            </div>
 
             <p>
               <input
@@ -146,19 +147,22 @@ const Cards = () => {
               title="To-do"
               tasks={filterTasksByStatus("Todo")}
               handleTaskEdit={handleTaskEdit}
-              onDrop={(taskId) => handleDrop(taskId, "todo")}
+              fetchTasks={fetchTasks}
+              setFetchTasks={setFetchTasks}
             />
             <Card
               title="Doing"
               tasks={filterTasksByStatus("Doing")}
               handleTaskEdit={handleTaskEdit}
-              onDrop={(taskId) => handleDrop(taskId, "todo")}
+              fetchTasks={fetchTasks}
+              setFetchTasks={setFetchTasks}
             />
             <Card
               title="Done"
               tasks={filterTasksByStatus("Done")}
               handleTaskEdit={handleTaskEdit}
-              onDrop={(taskId) => handleDrop(taskId, "todo")}
+              fetchTasks={fetchTasks}
+              setFetchTasks={setFetchTasks}
             />
           </div>
         </div>
