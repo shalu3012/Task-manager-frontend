@@ -1,6 +1,5 @@
 import React from "react";
 import Task from "./Task";
-import { useDrop } from "react-dnd";
 
 const Card = ({ title, tasks, handleTaskEdit, fetchTasks, setFetchTasks }) => {
   return (
