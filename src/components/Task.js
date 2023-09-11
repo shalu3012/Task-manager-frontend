@@ -8,12 +8,19 @@ const Task = ({ id, tasks, handleTaskEdit, fetchTasks, setFetchTasks }) => {
   const [editTaskId, setEditTaskId] = useState(0);
 
   async function deleteTask(id) {
+    const message = toast.loading("Please wait...");
     axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/api/task/delete`, {
         params: { _id: id },
       })
       .then((res) => {
-        toast.success(res.data.message);
+        toast.update(message, {
+          render: res.data.message,
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+
         setFetchTasks(true);
       });
   }

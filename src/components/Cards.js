@@ -28,10 +28,17 @@ const Cards = () => {
     });
   }
   function handleSubmit() {
+    const id = toast.loading("Please wait...");
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/api/task/create`, task)
       .then((res) => {
-        toast.success(res.data.message);
+        toast.update(id, {
+          render: res.data.message,
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+
         clearState();
         setFetchTasks(true);
         // window.location.reload();
@@ -103,7 +110,9 @@ const Cards = () => {
     <main>
       <div className="add-task">
         <div className="add-task">
-          <h2 className="add-task-header">Add task</h2>
+          <h2 className="add-task-header">
+            {editTaskId ? "Update Task" : "Add a Task"}
+          </h2>
           <form className="add-task-container">
             <div className="form-inp">
               <label htmlFor="name" className="form-label">
