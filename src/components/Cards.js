@@ -5,7 +5,7 @@ import Card from "./Card";
 import axios from "axios";
 
 const Cards = () => {
-  console.log(process.env.REACT_SERVER_URL);
+  console.log(process.env.REACT_APP_SERVER_URL);
   const [tasks, setTasks] = useState();
   const [editTaskId, setEditTaskId] = useState();
   const [task, setTask] = useState({
@@ -28,7 +28,7 @@ const Cards = () => {
   }
   function handleSubmit() {
     axios
-      .post(`${process.env.REACT_SERVER_URL}/api/task/create`, task)
+      .post(`${process.env.REACT_APP_SERVER_URL}/api/task/create`, task)
       .then((res) => {
         alert(res.data.message);
         clearState();
@@ -43,14 +43,14 @@ const Cards = () => {
   useEffect(() => {
     async function fetchTasks() {
       await axios
-        .get(`${process.env.REACT_SERVER_URL}/api/task/tasks`)
+        .get(`${process.env.REACT_APP_SERVER_URL}/api/task/tasks`)
         .then((response) => {
           setTasks(response.data.tasks);
         });
     }
 
     fetchTasks();
-  }, [tasks]);
+  }, []);
 
   function filterTasksByStatus(status) {
     if (tasks) {
@@ -60,7 +60,9 @@ const Cards = () => {
   async function handleTaskEdit(editing, id) {
     if (editing) {
       await axios
-        .get(`${process.env.REACT_SERVER_URL}/api/task`, { params: { id: id } })
+        .get(`${process.env.REACT_APP_SERVER_URL}/api/task`, {
+          params: { id: id },
+        })
         .then((response) => {
           setTask(response.data.task);
         });
@@ -71,7 +73,7 @@ const Cards = () => {
   async function handleUpdate() {
     console.log("inside handle update");
     await axios
-      .put(`${process.env.REACT_SERVER_URL}/api/task/update`, task, {
+      .put(`${process.env.REACT_APP_SERVER_URL}/api/task/update`, task, {
         params: { _id: editTaskId },
       })
       .then((response) => {
