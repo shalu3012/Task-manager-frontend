@@ -39,6 +39,9 @@ code {
   transition: all 0.3s ease 0s;
   border-radius: 10px;
 }
+.dragactive {
+  background-color: rgb(255, 255, 255);
+}
 .card:hover {
   transform: translateY(-7px);
 }
@@ -47,7 +50,7 @@ code {
   text-align: center;
   font-size: 14px;
 }
-.card-title.To-do {
+.card-title.Todo {
   background-color: rgb(255, 255, 111);
 }
 .card-title.Doing {

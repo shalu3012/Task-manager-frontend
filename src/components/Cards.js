@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { DragDropContext } from "react-beautiful-dnd";
 import Card from "./Card";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -81,6 +80,25 @@ const Cards = () => {
     }
   }
 
+  const onDragEnd = async (result) => {
+    console.log(result);
+    if (!result.destination) return;
+    const { source, destination } = result;
+    if (source.droppableId !== destination.droppableId) {
+      let data = {
+        status: result.destination.droppableId,
+      };
+      await axios
+        .put(`${process.env.REACT_APP_SERVER_URL}/api/task/update`, data, {
+          params: { _id: result.draggableId },
+        })
+        .then((response) => {
+          setFetchTasks(true);
+          toast.success(response.data.message);
+        });
+    }
+  };
+
   async function handleUpdate() {
     await axios
       .put(`${process.env.REACT_APP_SERVER_URL}/api/task/update`, task, {
@@ -115,7 +133,7 @@ const Cards = () => {
           </h2>
           <form className="add-task-container">
             <div className="form-inp">
-              <label htmlFor="name" className="form-label">
+              <label htmlFor="task-name" className="form-label">
                 Task
               </label>
               <input
@@ -129,7 +147,7 @@ const Cards = () => {
             </div>
 
             <div className="form-inp">
-              <label htmlFor="name" className="form-label">
+              <label htmlFor="task-status" className="form-label">
                 Status
               </label>
               <select value={task.status} onChange={handleChange} name="status">
@@ -149,11 +167,11 @@ const Cards = () => {
           </form>
         </div>
       </div>
-      <DndProvider backend={HTML5Backend}>
+      <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
         <div className="cards">
           <div className="cards-container">
             <Card
-              title="To-do"
+              title="Todo"
               tasks={filterTasksByStatus("Todo")}
               handleTaskEdit={handleTaskEdit}
               fetchTasks={fetchTasks}
@@ -175,7 +193,7 @@ const Cards = () => {
             />
           </div>
         </div>
-      </DndProvider>
+      </DragDropContext>
     </main>
   );
 };

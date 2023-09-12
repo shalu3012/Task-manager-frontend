@@ -1,44 +1,21 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useDrag } from "react-dnd";
-import { toast } from "react-toastify";
+import React from "react";
+import { Draggable } from "react-beautiful-dnd";
 
-const Task = ({ id, tasks, handleTaskEdit, fetchTasks, setFetchTasks }) => {
-  const [editing, setEditing] = useState(false);
-  const [editTaskId, setEditTaskId] = useState(0);
-
-  async function deleteTask(id) {
-    const message = toast.loading("Please wait...");
-    axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/api/task/delete`, {
-        params: { _id: id },
-      })
-      .then((res) => {
-        toast.update(message, {
-          render: res.data.message,
-          type: "success",
-          isLoading: false,
-          autoClose: 2000,
-        });
-
-        setFetchTasks(true);
-      });
-  }
-
-  async function handleEdit(id) {
-    setEditing(true);
-    handleTaskEdit(editing, id);
-  }
+const Task = ({ task, handleEdit, deleteTask, index }) => {
   return (
-    <main>
-      {tasks &&
-        tasks.map((task) => (
-          <div className="task-container" key={task._id}>
+    <div>
+      <Draggable key={task._id} draggableId={task._id} index={index}>
+        {(provided) => (
+          <div
+            className="task-container"
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
             <div className="task">
               <div className="task-title">
                 <p className="title">{task.name}</p>
               </div>
-              {/* <div className="task-content">{taskContent}</div> */}
             </div>
             <div className="task-actions">
               <div className="edit-task" onClick={() => handleEdit(task._id)}>
@@ -64,8 +41,9 @@ const Task = ({ id, tasks, handleTaskEdit, fetchTasks, setFetchTasks }) => {
               </div>
             </div>
           </div>
-        ))}
-    </main>
+        )}
+      </Draggable>
+    </div>
   );
 };
 
